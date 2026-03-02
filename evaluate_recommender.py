@@ -52,6 +52,9 @@ print("Evaluating...")
 hits = 0
 total = 0
 
+# SELECT MODE HERE
+mode = "hybrid"   # change to: "cart", "repeat", "hybrid"
+
 for order_id, group in data.groupby("order_id"):
     products = group["product_id"].tolist()
     user_id = group["user_id"].iloc[0]
@@ -62,13 +65,30 @@ for order_id, group in data.groupby("order_id"):
     hidden_item = random.choice(products)
     observed_cart = [p for p in products if p != hidden_item]
 
-    recs = recommend(user_id, observed_cart, top_k=10)
+    # ---- MODE SWITCH ----
+    if mode == "cart":
+        recs = recommend(user_id, observed_cart, top_k=10,
+                         w_cart=1.0, w_repeat=0.0)
+
+    elif mode == "repeat":
+        recs = recommend(user_id, observed_cart, top_k=10,
+                         w_cart=0.0, w_repeat=1.0)
+
+    else:  # hybrid
+        recs = recommend(user_id, observed_cart, top_k=10,
+                         w_cart=0.05, w_repeat=2.0)
 
     if hidden_item in recs:
         hits += 1
 
     total += 1
 
-precision_at_10 = hits / total
+if total == 0:
+    print("No valid evaluation cases found.")
+    precision_at_10 = 0
+else:
+    precision_at_10 = hits / total
 
+print("Total evaluated baskets:", total)
+print("Hits:", hits)
 print("Precision@10:", precision_at_10)
