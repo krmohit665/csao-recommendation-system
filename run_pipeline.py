@@ -9,8 +9,8 @@ def run(script_name):
         sys.exit(1)
 
 scripts = [
-   ## "prepare_data.py",
-   ## "split_data.py",
+    "prepare_data.py",
+    "split_data.py",
     "build_global_popularity.py",
     "build_cooccurrence.py",
     "build_lift_matrix.py",
