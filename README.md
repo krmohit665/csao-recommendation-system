@@ -50,7 +50,7 @@ pip install pandas numpy lightgbm scikit-learn joblib
 
 ```bash
 python run_pipeline.py
-
+```
 ## 🏗️ Architecture
 
 ### 1. Hybrid Item-to-Item Retrieval
