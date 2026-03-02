@@ -22,7 +22,7 @@ The system combines:
 
 This project uses the **Instacart Market Basket Analysis** dataset from Kaggle:
 
-https://www.kaggle.com/competitions/instacart-market-basket-analysis
+https://www.kaggle.com/datasets/psparks/instacart-market-basket-analysis
 
 ⚠ The dataset (~1GB) is NOT included in this repository.
 
@@ -42,8 +42,11 @@ After downloading, place the following files inside the `data/` directory:
 python3 -m venv .venv
 source .venv/bin/activate
 pip install pandas numpy lightgbm scikit-learn joblib
+```
+
 
 ## Run Pipeline
 
 ```bash
 python run_pipeline.py
+

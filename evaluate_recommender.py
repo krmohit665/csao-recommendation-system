@@ -2,7 +2,7 @@ import pandas as pd
 import pickle
 import random
 
-from recommend import recommend  # ✅ USE ACTUAL RECOMMENDER
+from recommend import recommend  
 
 print("Loading data...")
 
