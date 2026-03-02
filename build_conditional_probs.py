@@ -1,10 +1,8 @@
 import pandas as pd
 import pickle
-from collections import defaultdict
 
-print("Loading data...")
+print("Loading train data...")
 data = pd.read_csv("data/train_cart_data.csv")
-data = data.sample(n=300000, random_state=42)
 
 print("Computing item frequencies...")
 item_counts = data["product_id"].value_counts().to_dict()
@@ -17,9 +15,14 @@ print("Computing conditional probabilities...")
 
 conditional_probs = {}
 
-for (item1, item2), count in co_matrix.items():
-    if item_counts.get(item1, 0) > 0:
-        conditional_probs[(item1, item2)] = count / item_counts[item1]
+for item1, related_list in co_matrix.items():
+    count_item1 = item_counts.get(item1, 0)
+
+    if count_item1 == 0:
+        continue
+
+    for item2, co_count in related_list:
+        conditional_probs[(item1, item2)] = co_count / count_item1
 
 print("Saving conditional probability matrix...")
 

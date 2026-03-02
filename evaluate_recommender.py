@@ -2,6 +2,8 @@ import pandas as pd
 import pickle
 import random
 
+random.seed(42)
+
 from recommend import recommend  
 
 print("Loading data...")

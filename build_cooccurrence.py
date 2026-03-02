@@ -6,25 +6,36 @@ import pickle
 print("Loading cart data...")
 data = pd.read_csv("data/train_cart_data.csv")
 
-print("Reducing size for development...")
-data = data.sample(n=300000, random_state=42)
+print("Building co-occurrence counts with pruning...")
 
-print("Building co-occurrence counts...")
-
-co_matrix = defaultdict(int)
+co_matrix = defaultdict(lambda: defaultdict(int))
 
 grouped = data.groupby("order_id")
 
-for order_id, group in grouped:
+for _, group in grouped:
     products = group["product_id"].unique()
-    
-    for item1, item2 in combinations(products, 2):
-        co_matrix[(item1, item2)] += 1
-        co_matrix[(item2, item1)] += 1
 
-print("Saving co-occurrence matrix...")
+    for item1, item2 in combinations(products, 2):
+        co_matrix[item1][item2] += 1
+        co_matrix[item2][item1] += 1
+
+print("Pruning to top 100 related items per product...")
+
+pruned_matrix = {}
+
+for item, related_dict in co_matrix.items():
+    # Sort by co-occurrence count
+    top_related = sorted(
+        related_dict.items(),
+        key=lambda x: x[1],
+        reverse=True
+    )[:100]
+
+    pruned_matrix[item] = top_related
+
+print("Saving pruned co-occurrence matrix...")
 
 with open("data/cooccurrence.pkl", "wb") as f:
-    pickle.dump(dict(co_matrix), f)
+    pickle.dump(pruned_matrix, f)
 
-print("Done. Total pairs:", len(co_matrix))
+print("Done. Base items:", len(pruned_matrix))
