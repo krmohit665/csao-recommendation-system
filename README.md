@@ -38,10 +38,17 @@ After downloading, place the following files inside the `data/` directory:
 ---
 
 ## Environment Setup
-
+ 
+### Linux
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+pip install pandas numpy lightgbm scikit-learn joblib
+```
+### Windows
+```bash
+python -m venv .venv
+.venv\Scripts\activate
 pip install pandas numpy lightgbm scikit-learn joblib
 ```
 
